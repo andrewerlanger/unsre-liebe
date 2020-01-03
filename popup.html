@@ -1,0 +1,31 @@
+  <!DOCTYPE html>
+  <html>
+
+  <head>
+    <style>
+      #popup {
+        width: 15rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      button {
+        height: 30px;
+        outline: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="popup">
+      <p>Go to page then click this button.</p>
+      <button id="startButton">Start</button>
+      <button id="stopButton">Stop</button>
+      <script src='./puppeteer/utils/browser/puppeteer-web.js'></script>
+      <script src="popup.js"></script>
+    </div>
+  </body>
+
+  </html>
