@@ -1,21 +1,23 @@
 var ticketListener = {
-  init: function () {
+  init: function() {
     this.url = window.location.href;
     this.failureString = "Derzeit stehen keine Tickets zur Verfügung";
     this.injectAudio();
     this.sendRequest();
   },
-  injectAudio: function () {
-    this.audio = document.createElement('audio');
-    this.audio.id = 'audioAlert';
-    this.audio.src = 'http://soundbible.com/mp3/sms-alert-5-daniel_simon.mp3';
-    this.audio.preload = 'auto';
+  injectAudio: function() {
+    this.audio = document.createElement("audio");
+    this.audio.id = "audioAlert";
+    this.audio.preload = "auto";
+    this.audio.src =
+      "https://notificationsounds.com/soundfiles/08b255a5d42b89b0585260b6f2360bdd/file-sounds-1137-eventually.mp3";
+
     document.body.appendChild(this.audio);
   },
-  sendRequest: function () {
+  sendRequest: function() {
     var self = this;
     var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
+    xhr.onload = function() {
       if (xhr.status === 200) {
         self.searchForTickets(xhr.response);
       } else {
@@ -24,10 +26,10 @@ var ticketListener = {
         });
       }
     };
-    xhr.open('GET', this.url, true);
+    xhr.open("GET", this.url, true);
     xhr.send();
   },
-  searchForTickets: function (response) {
+  searchForTickets: function(response) {
     if (response.includes("thisshouldnotbehere")) {
       // if (response.includes(this.failureString)) {
       this.handleFailure();
@@ -35,7 +37,7 @@ var ticketListener = {
       this.handleSuccess();
     }
   },
-  handleSuccess: function () {
+  handleSuccess: function() {
     window.open(this.url, "_blank");
     this.audio.play();
 
@@ -43,14 +45,14 @@ var ticketListener = {
       code: "success"
     });
   },
-  handleFailure: async function () {
+  handleFailure: async function() {
     console.log("No tickets found, trying again...");
     await this.sleep();
     this.sendRequest();
   },
-  sleep: function () {
+  sleep: function() {
     return new Promise(resolve => setTimeout(resolve, 2000));
   }
-}
+};
 
 ticketListener.init();
