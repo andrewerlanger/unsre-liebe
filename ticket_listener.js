@@ -1,11 +1,11 @@
 var ticketListener = {
-  init: function() {
+  init: function () {
     this.url = window.location.href;
     this.failureString = "Derzeit stehen keine Tickets zur Verfügung";
     this.injectAudio();
     this.sendRequest();
   },
-  injectAudio: function() {
+  injectAudio: function () {
     this.audio = document.createElement("audio");
     this.audio.id = "audioAlert";
     this.audio.preload = "auto";
@@ -14,43 +14,41 @@ var ticketListener = {
 
     document.body.appendChild(this.audio);
   },
-  sendRequest: function() {
+  sendRequest: function () {
     var self = this;
     var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         self.searchForTickets(xhr.response);
       } else {
-        chrome.runtime.sendMessage({
-          code: "error"
-        });
+        console.log("something went wrong...")
       }
     };
     xhr.open("GET", this.url, true);
     xhr.send();
   },
-  searchForTickets: function(response) {
-    if (response.includes("thisshouldnotbehere")) {
-      // if (response.includes(this.failureString)) {
+  searchForTickets: function (response) {
+    if (response.includes(this.failureString)) {
       this.handleFailure();
     } else {
       this.handleSuccess();
     }
   },
-  handleSuccess: function() {
+  handleSuccess: function () {
     window.open(this.url, "_blank");
     this.audio.play();
-
-    chrome.runtime.sendMessage({
-      code: "success"
+  },
+  handleFailure: function () {
+    chrome.storage.sync.get("running", result => {
+      result.running && this.resendRequest();
     });
   },
-  handleFailure: async function() {
+  resendRequest: async function () {
     console.log("No tickets found, trying again...");
     await this.sleep();
     this.sendRequest();
   },
-  sleep: function() {
+  sleep: function () {
     return new Promise(resolve => setTimeout(resolve, 2000));
   }
 };

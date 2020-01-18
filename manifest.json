@@ -2,17 +2,15 @@
   "name": "Unsre Liebe",
   "version": "1.0",
   "description": "Ticket Notifications",
-  "permissions": ["activeTab", "declarativeContent"],
+  "permissions": ["activeTab", "declarativeContent", "storage"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
   },
-  "content_scripts": [
-    {
-      "matches": ["https://*.union-zeughaus.de/union-berlin/*"],
-      "js": ["content.js"]
-    }
-  ],
+  "content_scripts": [{
+    "matches": ["https://*.union-zeughaus.de/union-berlin/*"],
+    "js": ["content.js"]
+  }],
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {

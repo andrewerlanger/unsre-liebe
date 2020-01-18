@@ -1,11 +1,13 @@
 var linkHelper = {
-  init: function() {
-    // this.link = document.querySelector(".fa-arrow-circle-right");
-    console.log(window.location.href);
-    var regex = /.*union-zeughaus\.de\/union-berlin\/\.*-spieltag\.htm/g;
-    if (window.location.href.match(regex)) {
-      console.log("in here");
-      var link = document.querySelector("#HomeLink");
+  init: function () {
+    chrome.storage.sync.get("running", result => {
+      result.running && this.checkPage();
+    });
+  },
+  checkPage: function () {
+    var regex = /.*union-zeughaus\.de\/union-berlin\/.*\.-spieltag\.htm/g;
+    if (regex.test(window.location.href)) {
+      var link = document.querySelector(".fa-arrow-circle-right");
       link && link.click();
     }
   }
